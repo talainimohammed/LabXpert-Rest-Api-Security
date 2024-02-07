@@ -1,6 +1,7 @@
 package org.techlab.labxpert.service;
 
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.techlab.labxpert.dtos.UtilisateurDTO;
 import org.techlab.labxpert.entity.Utilisateur;
 
@@ -13,5 +14,5 @@ public interface I_Utilisateur {
     public List<UtilisateurDTO> showUsers();
     public UtilisateurDTO showUserwithid(Long id);
 
-    public UtilisateurDTO authentification(String username,String password);
+    public UserDetails authentification(String username);
 }

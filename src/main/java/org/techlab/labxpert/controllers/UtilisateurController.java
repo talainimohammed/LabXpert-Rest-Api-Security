@@ -3,6 +3,7 @@ package org.techlab.labxpert.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.techlab.labxpert.dtos.UtilisateurDTO;
 import org.techlab.labxpert.entity.Utilisateur;
@@ -56,9 +57,9 @@ public class UtilisateurController {
         return response;
     }
     @GetMapping("/login")
-    public UtilisateurDTO login(@RequestParam String username,@RequestParam String password){
+    public UserDetails login(@RequestParam String username,@RequestParam String password){
         // API pour Authentification
-        UtilisateurDTO user=i_utilisateur.authentification(username,password);
+        UserDetails user=i_utilisateur.authentification(username);
         return user;
     }
 }

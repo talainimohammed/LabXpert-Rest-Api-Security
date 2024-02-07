@@ -2,6 +2,9 @@ package org.techlab.labxpert.service.serviceImp;
 
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.techlab.labxpert.config.JwtUtil;
 import org.techlab.labxpert.dtos.UtilisateurDTO;
 import org.techlab.labxpert.entity.Utilisateur;
 import org.techlab.labxpert.repository.UtilisateurRepository;
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,11 +49,11 @@ public class UtilisateurServiceImp implements I_Utilisateur {
     }
 
     @Override
-    public UtilisateurDTO authentification(String username, String password) {
-
-        Utilisateur user=utilisateurRepository.findUserByUsernameAndPassword(username,password);
-        user.setPassword("********");
-        return modelMapper.map(user,UtilisateurDTO.class);
+    public UserDetails authentification(String username) {
+        Utilisateur user=utilisateurRepository.findUtilisateurByNomUtilisateur(username);
+        System.out.println(user);
+        UserDetails userDetails= new User(user.getNomUtilisateur(),user.getPassword(),new ArrayList<>());
+        return userDetails;
     }
 
     @Override
