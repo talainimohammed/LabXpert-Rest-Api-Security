@@ -34,8 +34,7 @@ public class SecurityConfig {
         .authorizeHttpRequests().anyRequest().authenticated()
                 .and()
         .addFilter(new JWTAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)) ,jwtHelper))
-        .addFilterBefore(new JWTAuthorizationFilter(jwtHelper) , UsernamePasswordAuthenticationFilter.class)
-                ;
+        .addFilterBefore(new JWTAuthorizationFilter(jwtHelper) , UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
