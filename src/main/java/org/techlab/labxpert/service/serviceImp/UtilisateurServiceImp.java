@@ -4,7 +4,7 @@ package org.techlab.labxpert.service.serviceImp;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.techlab.labxpert.config.JwtUtil;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.techlab.labxpert.dtos.UtilisateurDTO;
 import org.techlab.labxpert.entity.Utilisateur;
 import org.techlab.labxpert.repository.UtilisateurRepository;
@@ -25,10 +25,13 @@ public class UtilisateurServiceImp implements I_Utilisateur {
     private UtilisateurRepository utilisateurRepository;
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    PasswordEncoder passwordEncoder;
     @Override
     public UtilisateurDTO addUser(UtilisateurDTO userdto) {
+        String password=passwordEncoder.encode(userdto.getPassword());
+        userdto.setPassword(password);
         Utilisateur user=utilisateurRepository.save(modelMapper.map(userdto,Utilisateur.class));
-        user.setPassword("********");
         return modelMapper.map(user,UtilisateurDTO.class);
     }
     @Override
@@ -49,11 +52,11 @@ public class UtilisateurServiceImp implements I_Utilisateur {
     }
 
     @Override
-    public UserDetails authentification(String username) {
+    public UtilisateurDTO authentification(String username) {
         Utilisateur user=utilisateurRepository.findUtilisateurByNomUtilisateur(username);
         System.out.println(user);
-        UserDetails userDetails= new User(user.getNomUtilisateur(),user.getPassword(),new ArrayList<>());
-        return userDetails;
+        //UserDetails userDetails= new User(user.getNomUtilisateur(),user.getPassword(),new ArrayList<>());
+        return modelMapper.map(user,UtilisateurDTO.class);
     }
 
     @Override

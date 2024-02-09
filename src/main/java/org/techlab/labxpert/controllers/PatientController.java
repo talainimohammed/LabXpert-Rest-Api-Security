@@ -3,6 +3,7 @@ package org.techlab.labxpert.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.techlab.labxpert.dtos.PatientDTO;
 import org.techlab.labxpert.dtos.UtilisateurDTO;
@@ -24,18 +25,21 @@ public class PatientController {
     I_Patient i_patient;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('Preleveur')")
     public List allPatients(){
         // API pour afficher liste des patients
         List<PatientDTO> listPatient=i_patient.showPatient();
         return listPatient;
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('Preleveur')")
     public PatientDTO showPatient(@PathVariable(value = "id") Long id_Patient){
         // API pour afficher patients par ID
         PatientDTO patient=i_patient.showPatientwithid(id_Patient);
         return patient;
     }
     @PostMapping
+    @PreAuthorize("hasAuthority('Preleveur')")
     public ResponseEntity<PatientDTO> addPatient(@RequestBody @Valid PatientDTO patientDTO){
         // API pour ajouter patients
         PatientDTO patientDTO1=i_patient.addPatient(patientDTO);
@@ -43,6 +47,7 @@ public class PatientController {
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('Preleveur')")
     public ResponseEntity<PatientDTO> modPatient(@RequestBody @Valid PatientDTO patientDTO){
         // API pour modifier patients
         PatientDTO patientDTO1=i_patient.modPatient(patientDTO);
@@ -50,6 +55,7 @@ public class PatientController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('Responsable')")
     public Map<String,Boolean> delPatient(@PathVariable(value = "id") Long id_patient ){
         // API pour supprimer patients
         PatientDTO patientDTO=i_patient.showPatientwithid(id_patient);

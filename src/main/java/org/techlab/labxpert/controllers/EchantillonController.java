@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.techlab.labxpert.dtos.AnalyseDTO;
@@ -40,17 +41,20 @@ public class EchantillonController {
     ModelMapper modelMapper;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('Preleveur')")
     public List<EchantillonDTO> showEchantillons() {
         // API pour Afficher liste Echantillon
         return i_echantillon.showEhantillon();
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('Preleveur')")
     public ResponseEntity<EchantillonDTO> showEchantillonWithId(@PathVariable(value = "id") Long id) {
         // API pour Afficher Echantillon par id
         EchantillonDTO echantillonDTO = i_echantillon.showEchantillonwithid(id);
         return ResponseEntity.ok().body(echantillonDTO);
     }
     @PutMapping
+    @PreAuthorize("hasAuthority('Preleveur')")
     public ResponseEntity<EchantillonDTO> modEchantillon(@RequestBody @Valid EchantillonDTO echantillonDTO) {
         // API pour afficher Echantillon par Id
         EchantillonDTO modifiedEchantillon = i_echantillon.modEchantillon(echantillonDTO);
@@ -58,6 +62,7 @@ public class EchantillonController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('Preleveur')")
     public Map<String,Boolean> delUser(@PathVariable(value = "id") Long id ){
         // API pour Supprimer Utilisateur
         EchantillonDTO echantillonDTO= i_echantillon.showEchantillonwithid( id);
@@ -69,6 +74,7 @@ public class EchantillonController {
         return response;
     }
     @PostMapping
+    @PreAuthorize("hasAuthority('Preleveur')")
     ResponseEntity<EchantillonDTO> addEchantillon( @RequestBody @Valid EchantillonDTO echantillondto){
         // API pour Ajouter un Echantillon
         Utilisateur utilisateur=modelMapper.map(i_utilisateur.showUserwithid(echantillondto.getUtilisateur().getId()),Utilisateur.class);

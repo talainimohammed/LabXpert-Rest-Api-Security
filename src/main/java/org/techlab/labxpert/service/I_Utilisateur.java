@@ -14,5 +14,5 @@ public interface I_Utilisateur {
     public List<UtilisateurDTO> showUsers();
     public UtilisateurDTO showUserwithid(Long id);
 
-    public UserDetails authentification(String username);
+    public UtilisateurDTO authentification(String username);
 }

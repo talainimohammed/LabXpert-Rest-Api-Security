@@ -10,8 +10,5 @@ import java.util.List;
 @Repository
 public interface UtilisateurRepository extends JpaRepository<Utilisateur,Long> {
     List<Utilisateur> findByDeletedFalse();
-    @Query("SELECT u FROM Utilisateur u WHERE u.nomUtilisateur = ?1 and u.password = ?2")
-    Utilisateur findUserByUsernameAndPassword(String username, String password);
-    //@Query("SELECT u FROM Utilisateur u WHERE u.nomUtilisateur = ?1")
     Utilisateur findUtilisateurByNomUtilisateur(String username);
 }

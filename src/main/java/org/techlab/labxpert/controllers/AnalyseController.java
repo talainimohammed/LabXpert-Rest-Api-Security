@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.techlab.labxpert.dtos.AnalyseDTO;
 import org.techlab.labxpert.dtos.EchantillonDTO;
@@ -43,6 +44,7 @@ public class AnalyseController {
     ModelMapper modelMapper;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('Technicien')")
     public ResponseEntity<List<AnalyseDTO>> getanalyses() {
         // API pour Afficher tous les analyses
         List<AnalyseDTO> analyses = i_analyse.showAnalyses();
@@ -50,6 +52,7 @@ public class AnalyseController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('Technicien')")
     public ResponseEntity<AnalyseDTO> getanalyse(@PathVariable(value = "id") Long id) {
         // API pour affiche analyse par id analyse
         AnalyseDTO analyse = i_analyse.showAnalyseWithId(id);
@@ -57,6 +60,7 @@ public class AnalyseController {
     }
 
     @GetMapping("/echantillon/{id}")
+    @PreAuthorize("hasAuthority('Preleveur')")
     public ResponseEntity<AnalyseDTO> addAnalyse(@PathVariable(value = "id") Long id_echantillong) {
         // API pour ajouter analyse
         EchantillonDTO echantillonDTO = i_echantillon.showEchantillonwithid(id_echantillong);
@@ -68,6 +72,7 @@ public class AnalyseController {
     }
 
     @GetMapping("/pdf/{id}")
+    @PreAuthorize("hasAuthority('Preleveur')")
     public ResponseEntity<Resource> getpdf(@PathVariable(value = "id") Long id_Analyse) throws JRException, FileNotFoundException, ParseException {
         // API pour imprimer resultat d'analyse
         byte[] reportContent = i_rapport.exportReport(id_Analyse);
@@ -83,6 +88,7 @@ public class AnalyseController {
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('Technicien')")
     public ResponseEntity<AnalyseDTO> updateAnalyse(@RequestBody @Valid AnalyseDTO analyseDTO) {
         // API pour Modifier analyse
         AnalyseDTO analyseDTO1 = i_analyse.showAnalyseWithId(analyseDTO.getIdAnalyse());
@@ -107,6 +113,7 @@ public class AnalyseController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('Technicien')")
     public ResponseEntity<Map<String, Boolean>> deleteAnalyse(@PathVariable(value = "id") Long id_analyse) {
         // API pour supprimer analyse
         AnalyseDTO analyseDTO = i_analyse.showAnalyseWithId(id_analyse);
@@ -118,6 +125,7 @@ public class AnalyseController {
     }
 
     @PostMapping("/planification")
+    @PreAuthorize("hasAuthority('Preleveur')")
     public ResponseEntity<PlanificationDTO> affectAnalyse(@RequestBody @Valid PlanificationDTO planificationDTO) {
         // API pour affecter une analyse
         planificationDTO = i_analyse.planifierAnalyse(planificationDTO);

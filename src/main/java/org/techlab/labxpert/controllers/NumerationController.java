@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.techlab.labxpert.dtos.AnalyseDTO;
 import org.techlab.labxpert.dtos.NumerationDTO;
@@ -23,12 +24,14 @@ public class NumerationController {
     I_Analyse i_analyse;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('Technicien')")
     public ResponseEntity<List<NumerationDTO>> showNumerations(){
         // API Pour Afficher liste numerations
         List<NumerationDTO> numerationDTO=i_numeration.allNumeration();
         return new ResponseEntity<>(numerationDTO,HttpStatus.OK);
     }
     @GetMapping("/analyse/{id}")
+    @PreAuthorize("hasAuthority('Technicien')")
     public ResponseEntity<List<NumerationDTO>> showNumerationsWithAnalyse(@PathVariable(value = "id") Long id){
         // API Pour Afficher numerations par analyse
         AnalyseDTO analyseDTO=i_analyse.showAnalyseWithId(id);
@@ -36,6 +39,7 @@ public class NumerationController {
         return  new ResponseEntity<>(numerationDTO,HttpStatus.OK);
     }
     @PostMapping
+    @PreAuthorize("hasAuthority('Responsable')")
     public ResponseEntity<NumerationDTO> addNumeration(@RequestBody @Valid NumerationDTO numerationDTO){
         // API pour Ajouter Numeration
         NumerationDTO numerationDTO1=i_numeration.addNumeration(numerationDTO);
@@ -43,6 +47,7 @@ public class NumerationController {
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('Technicien')")
     public ResponseEntity<NumerationDTO> modNumeration(@RequestBody @Valid NumerationDTO numerationDTO){
         // API Pour Modifier numeration
         NumerationDTO numerationDTO1=i_numeration.modNumeration(numerationDTO);
@@ -50,6 +55,7 @@ public class NumerationController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('Responsable')")
     public ResponseEntity<HashMap<String,Boolean>> deleteNumeration(@PathVariable(value = "id") Long id){
         // API Pour supprimer Numeration
         NumerationDTO numerationDTO=i_numeration.NumerationWithId(id);
